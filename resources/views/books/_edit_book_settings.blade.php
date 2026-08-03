@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6">
         <h4 class="text-primary">{{ __('book.detail') }}</h4>
-        {!! FormField::text('name', ['required' => true, 'label' => __('book.name')]) !!}
+        {!! FormField::text('name', ['required' => true, 'label' => __('book.name'), 'maxlength' => '40']) !!}
         {!! FormField::textarea('description', ['label' => __('book.description')]) !!}
         <div class="row">
             <div class="col-md-6">
