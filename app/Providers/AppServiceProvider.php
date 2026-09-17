@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Models\BankAccount;
 use App\Models\Book;
+use App\Models\Distribution;
+use App\Models\Donation;
+use App\Models\Event;
 use App\Transaction;
 use App\User;
 use Illuminate\Auth\SessionGuard;
@@ -31,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
             'users' => User::class,
             'bank_accounts' => BankAccount::class,
             'transactions' => Transaction::class,
+            'donations' => Donation::class,
+            'distributions' => Distribution::class,
+            'events' => Event::class,
         ]);
 
         // Ref: https://dzone.com/articles/how-to-use-laravel-macro-with-example
@@ -76,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer(
             [
                 'donors.transactions.create', 'transactions.create', 'transactions.show',
+                'donations.create', 'distributions.create',
             ],
             function ($view) {
                 $disk = app('App\Services\SystemInfo\DiskUsageService'::class);

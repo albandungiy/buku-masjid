@@ -7,6 +7,7 @@
                 <div class="bg-gray-100 h-full w-full"></div>
             @endif
         </div>
+        @livewire('public-display.friday-lecturing', ['theme' => $theme])
         @livewire('public-display.book-cards', ['theme' => $theme])
     </div>
     

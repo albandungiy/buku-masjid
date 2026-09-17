@@ -9,6 +9,12 @@
                         <td>{{ __('book.management_title') }}</td>
                         <td>{{ Setting::for($book)->get('management_title', __('report.management')) }}</td>
                     </tr>
+                    @if (config('features.ziswaf.is_active') && $book->isZiswafFundBook())
+                        <tr>
+                            <td>{{ __('book.hak_amil_percentage') }}</td>
+                            <td>{{ Setting::for($book)->get('hak_amil_percentage', '0') }}%</td>
+                        </tr>
+                    @endif
                     <tr><td>{{ __('book.manager') }}</td><td>{{ $book->manager->name }}</td></tr>
                     <tr><td>{{ __('book.description') }}</td><td>{{ $book->description }}</td></tr>
                     <tr><td>{{ __('bank_account.bank_account') }}</td><td>{{ $book->bankAccount->name }}</td></tr>

@@ -128,6 +128,12 @@ return [
         ],
     ],
 
+    'distribution' => [
+        'amount' => [
+            'not_exceed_balance' => 'Jumlah penyaluran melebihi saldo dana yang tersedia (Rp :balance).',
+        ],
+    ],
+
     /*
     |---------------------------------------------------------------------------------------
     | Kustom Validasi Atribut

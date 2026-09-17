@@ -54,6 +54,7 @@ return [
     'time_text_placeholder' => 'Ba\'da Magrib',
     'lecturer_name' => 'Lecturer name',
     'friday_lecturer_name' => 'Khatib',
+    'friday_today_title' => 'Today\'s Friday Sermon',
     'friday_lecturer_and_imam' => 'Khatib and Imam',
     'book_title' => 'Book Title',
     'book' => 'Book',

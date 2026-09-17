@@ -46,6 +46,14 @@
                     </a>
                 @endcan
             @endif
+            @if (Route::has('donations.index'))
+                @can('view-any', new App\Models\Donation)
+                    <a class="xs-navbar mr-4" href="{{ route('donations.index') }}" title="{{ __('ziswaf.ziswaf') }}">
+                        <i class="fe fe-heart h3 d-inline d-lg-none"></i>
+                        <span class="d-none d-lg-inline"><i class="fe fe-heart"></i> {{ __('ziswaf.ziswaf') }}</span>
+                    </a>
+                @endcan
+            @endif
             <a class="xs-navbar mr-4" href="{{ route('reports.index') }}" title="{{ __('report.report') }}">
                 <i class="fe fe-bar-chart-2 h3 d-inline d-lg-none"></i>
                 <span class="d-none d-lg-inline"><i class="fe fe-bar-chart-2"></i> {{ __('report.report') }}</span>
@@ -89,6 +97,14 @@
                 <a class="col px-1 border-right border-primary" href="{{ route('partners.index') }}" title="{{ __('partner.partner') }}">
                     <div><i class="fe fe-users h3"></i></div>
                     {{ __('partner.partner') }}
+                </a>
+            @endcan
+        @endif
+        @if (Route::has('donations.index'))
+            @can('view-any', new App\Models\Donation)
+                <a class="col px-1 border-right border-primary" href="{{ route('donations.index') }}" title="{{ __('ziswaf.ziswaf') }}">
+                    <div><i class="fe fe-heart h3"></i></div>
+                    {{ __('ziswaf.ziswaf') }}
                 </a>
             @endcan
         @endif

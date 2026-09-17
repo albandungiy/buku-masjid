@@ -115,6 +115,7 @@ class BookController extends Controller
             'sign_name_right' => ['nullable', 'string', 'max:60'],
             'due_date' => ['nullable', 'date_format:Y-m-d'],
             'landing_page_content' => ['nullable', 'string', 'max:10000'],
+            'hak_amil_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
         if ($request->user()->cannot('change-manager', $book)) {
             unset($bookData['manager_id']);
@@ -156,6 +157,7 @@ class BookController extends Controller
         array_key_exists('spending_partner_null', $bookData) ? Setting::for($book)->set('spending_partner_null', $bookData['spending_partner_null']) : null;
         array_key_exists('due_date', $bookData) ? Setting::for($book)->set('due_date', $bookData['due_date']) : null;
         array_key_exists('landing_page_content', $bookData) ? Setting::for($book)->set('landing_page_content', $bookData['landing_page_content']) : null;
+        array_key_exists('hak_amil_percentage', $bookData) ? Setting::for($book)->set('hak_amil_percentage', (string) $bookData['hak_amil_percentage']) : null;
     }
 
     public function destroy(Book $book)

@@ -1,1 +1,1 @@
-&copy; {{ date('Y') }} Buku Masjid
+&copy; {{ date('Y') }} Masjid Al Barokah

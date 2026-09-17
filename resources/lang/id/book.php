@@ -19,6 +19,8 @@ return [
     'back_to_index' => 'Kembali ke daftar Buku Kas / Program',
     'management_title' => 'Kepengurusan/Kepanitiaan',
     'management_title_info_text' => 'Misal: Takmir Ramadhan, Panitia Qurban',
+    'hak_amil_percentage' => 'Persentase Hak Amil',
+    'hak_amil_percentage_info_text' => 'Persentase dari setiap donasi terkonfirmasi di buku ini yang otomatis dipindahkan ke buku "Hak Amil". Kosongkan/0 jika tidak ada potongan.',
     'admin_only' => 'Hanya Admin',
 
     // Actions

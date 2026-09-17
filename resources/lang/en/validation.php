@@ -128,6 +128,12 @@ return [
         ],
     ],
 
+    'distribution' => [
+        'amount' => [
+            'not_exceed_balance' => 'The distribution amount exceeds the available fund balance (Rp :balance).',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

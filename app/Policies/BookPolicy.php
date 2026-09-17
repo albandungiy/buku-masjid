@@ -57,4 +57,14 @@ class BookPolicy
     {
         return $this->update($user, $book) && $book->status_id == Book::STATUS_ACTIVE;
     }
+
+    public function manageDonations(User $user, Book $book): bool
+    {
+        return $this->update($user, $book) && $book->status_id == Book::STATUS_ACTIVE;
+    }
+
+    public function manageDistributions(User $user, Book $book): bool
+    {
+        return $this->update($user, $book) && $book->status_id == Book::STATUS_ACTIVE;
+    }
 }

@@ -19,6 +19,8 @@ return [
     'back_to_index' => 'Back to Cash Book / Program List',
     'management_title' => 'Management Title',
     'management_title_info_text' => 'Eg: Ramadhan committee, Qurban committee',
+    'hak_amil_percentage' => 'Hak Amil Percentage',
+    'hak_amil_percentage_info_text' => 'Percentage of every confirmed donation in this book that is automatically moved to the "Hak Amil" book. Leave empty/0 for no cut.',
     'admin_only' => 'Admin Only',
 
     // Actions

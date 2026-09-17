@@ -137,6 +137,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('lecturings', App\Http\Controllers\LecturingController::class);
     }
 
+    /*
+     * Ziswaf Routes (Donations, Distributions, Events)
+     */
+    if (config('features.ziswaf.is_active')) {
+        Route::resource('donations', 'DonationsController')->only(['index', 'create', 'store', 'show', 'destroy']);
+        Route::patch('donations/{donation}/confirm', 'Donations\ConfirmController@update')->name('donations.confirm');
+
+        Route::resource('distributions', 'DistributionsController')->only(['index', 'create', 'store', 'show', 'destroy']);
+        Route::patch('distributions/{distribution}/approve', 'Distributions\ApproveController@update')->name('distributions.approve');
+        Route::patch('distributions/{distribution}/reject', 'Distributions\RejectController@update')->name('distributions.reject');
+
+        Route::resource('events', 'EventsController');
+    }
+
     Route::get('masjid_profile', [App\Http\Controllers\MasjidProfileController::class, 'show'])->name('masjid_profile.show');
     Route::get('masjid_profile/edit', [App\Http\Controllers\MasjidProfileController::class, 'edit'])->name('masjid_profile.edit');
     Route::patch('masjid_profile', [App\Http\Controllers\MasjidProfileController::class, 'update'])->name('masjid_profile.update');

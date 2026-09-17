@@ -130,4 +130,20 @@ class Book extends Model
     {
         return sha1($this->id.config('app.key'));
     }
+
+    /**
+     * Ziswaf fund-type books (Zakat/Infak/Sedekah/Wakaf) are identified by name against
+     * config('ziswaf.default_hak_amil_percentages') — there is no dedicated fund_type
+     * column. This is the single source of truth for that check; use it (or the scope
+     * below) instead of re-matching book names elsewhere.
+     */
+    public function isZiswafFundBook(): bool
+    {
+        return in_array($this->name, array_keys(config('ziswaf.default_hak_amil_percentages', [])));
+    }
+
+    public function scopeZiswafFundBooks($query)
+    {
+        return $query->whereIn('name', array_keys(config('ziswaf.default_hak_amil_percentages', [])));
+    }
 }

@@ -30,6 +30,9 @@
             <div class="row align-items-end">
                 @livewire('public-home.weekly-financial-summary')
             </div>
+            <div class="row align-items-end">
+                @livewire('public-home.ziswaf-summary')
+            </div>
             </div>
             <div class="col-lg-12">
                 <div class="row align-items-start">

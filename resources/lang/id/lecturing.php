@@ -54,6 +54,7 @@ return [
     'time_text_placeholder' => 'Ba\'da Magrib',
     'lecturer_name' => 'Penceramah',
     'friday_lecturer_name' => 'Khatib',
+    'friday_today_title' => 'Khutbah Jumat Hari Ini',
     'friday_lecturer_and_imam' => 'Khatib dan Imam',
     'book_title' => 'Judul Kitab',
     'book' => 'Kitab',

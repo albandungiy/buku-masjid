@@ -13,4 +13,7 @@ return [
     'public_display' => [
         'is_active' => env('FEATURES_PUBLIC_DISPLAY_IS_ACTIVE', true),
     ],
+    'ziswaf' => [
+        'is_active' => env('FEATURES_ZISWAF_IS_ACTIVE', false),
+    ],
 ];

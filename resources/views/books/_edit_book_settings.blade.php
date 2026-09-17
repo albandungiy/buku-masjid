@@ -78,6 +78,18 @@
             'placeholder' => __('report.management'),
             'info' => ['text' => __('book.management_title_info_text')],
         ]) !!}
+        @if (config('features.ziswaf.is_active') && $book->isZiswafFundBook())
+            {!! FormField::text('hak_amil_percentage', [
+                'value' => Setting::for($book)->get('hak_amil_percentage', '0'),
+                'label' => __('book.hak_amil_percentage'),
+                'type' => 'number',
+                'step' => '0.01',
+                'min' => '0',
+                'max' => '100',
+                'addon' => ['after' => '%'],
+                'info' => ['text' => __('book.hak_amil_percentage_info_text')],
+            ]) !!}
+        @endif
         {!! FormField::radios('has_pdf_page_number', [
             '1' => __('app.yes'),
             '0' => __('app.no'),

@@ -11,5 +11,9 @@ class DatabaseSeeder extends Seeder
         $this->call(DefaultUserTableSeeder::class);
         $this->call(DefaultBookTableSeeder::class);
         $this->call(DefaultCatergoryTableSeeder::class);
+
+        if (config('features.ziswaf.is_active')) {
+            $this->call(ZiswafSeeder::class);
+        }
     }
 }

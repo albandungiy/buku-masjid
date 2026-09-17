@@ -41,6 +41,11 @@ Jika anda tertarik untuk menjadi sponsor/mitra, silakan hubungi Whatsapp Tim Buk
    - Laporan kas Mingguan
 5. Pengelolaan jadwal khatib Jumat.
 6. Pengelolaan jadwal pengajian rutin.
+7. Pengelolaan Ziswaf (Zakat, Infak, Sedekah, Wakaf) — fitur opsional, aktifkan lewat `FEATURES_ZISWAF_IS_ACTIVE=true` di `.env`:
+   - Pencatatan donasi per jenis dana dengan konfirmasi & pembagian Hak Amil otomatis.
+   - Penyaluran dana ke Asnaf dengan validasi saldo, alur persetujuan (approve/reject).
+   - Pengaturan persentase Hak Amil per jenis dana.
+   - Kalender kegiatan (event) pengurus/UPZ.
 
 ## Cara Install
 
@@ -127,21 +132,35 @@ Untuk menggunakan docker silahkan jalankan perintah ini di terminal:
 
 ### Data Demo
 
-Ketika sudah ter-install di localhost, kita bisa generate data dummy untuk simulasi sistem buku masjid. Datad demo dapat di-generate dengan perintah berikut:
+Ketika sudah ter-install di localhost, kita bisa generate data dummy untuk simulasi sistem buku masjid. Data demo dapat di-generate dengan perintah berikut:
 
-Generate demo data (3 bulan terakhir):
+Generate demo data buku catatan umum (buku, rekening bank, transaksi, jadwal pengajian — 3 bulan terakhir):
 
 ```bash
 $ php artisan buku-masjid:generate-demo-data
 ```
 
-Hapus semua demo data (yang `created_at` nya `NULL`)
+Hapus semua demo data di atas (yang `created_at` nya `NULL`):
 
 ```bash
 $ php artisan buku-masjid:remove-demo-data
 ```
 
 Lengkapnya dapat dilihat pada: [Dokumentasi buku-masjid/demo-data](https://github.com/buku-masjid/demo-data#cara-pakai).
+
+#### Data Demo Modul Ziswaf
+
+Command di atas belum mengisi data Partner (muzakki/donatur) maupun modul Ziswaf. Kalau `FEATURES_ZISWAF_IS_ACTIVE=true` (lihat [.env.example](.env.example)) dan sudah pernah menjalankan `php artisan migrate --seed`, isi data dummy-nya dengan:
+
+```bash
+$ php artisan db:seed --class=DemoContentSeeder
+```
+
+Perintah ini membuat contoh muzakki/donatur, donasi (pending/confirmed/failed), penyaluran ke Asnaf (pending/approved/rejected), dan kegiatan — semua ditandai `created_at` `NULL` seperti data demo lainnya. Hapus lagi dengan:
+
+```bash
+$ php artisan buku-masjid:remove-ziswaf-demo-data
+```
 
 ## Screenshot
 

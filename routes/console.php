@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Book;
 use App\Models\Partner;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\DB;
@@ -62,3 +63,39 @@ Artisan::command('partner:upgrade-type-levels', function () {
     }
     $this->comment('Done upgrading '.$updatedPartnersCount.' partners');
 })->describe('Ugprade existing partner types and levels');
+
+Artisan::command('buku-masjid:remove-ziswaf-demo-data', function () {
+    if (app()->environment('production')) {
+        $this->error('This command is only for non production!');
+
+        return 0;
+    }
+
+    if (!$this->confirm('Are you sure you want to remove Ziswaf demo data (donations, distributions, events, demo partners)?')) {
+        return 0;
+    }
+
+    // Mirrors vendor/buku-masjid/demo-data's own convention: demo rows are the ones
+    // with created_at left NULL (see DemoContentSeeder::markAsDemo()).
+    $ziswafBookIds = Book::ziswafFundBooks()->pluck('id')
+        ->push(config('ziswaf.hak_amil_book_id'))
+        ->filter()
+        ->unique();
+
+    $this->comment('Removing demo distributions...');
+    DB::table('distributions')->whereNull('created_at')->delete();
+
+    $this->comment('Removing demo donations...');
+    DB::table('donations')->whereNull('created_at')->delete();
+
+    $this->comment('Removing demo transactions in Ziswaf books...');
+    DB::table('transactions')->whereNull('created_at')->whereIn('book_id', $ziswafBookIds)->delete();
+
+    $this->comment('Removing demo events...');
+    DB::table('events')->whereNull('created_at')->delete();
+
+    $this->comment('Removing demo partners...');
+    DB::table('partners')->whereNull('created_at')->delete();
+
+    $this->info('Ziswaf demo data removed.');
+})->describe('Remove Ziswaf demo data (donations, distributions, events, demo partners)');
