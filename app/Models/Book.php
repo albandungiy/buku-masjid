@@ -146,4 +146,14 @@ class Book extends Model
     {
         return $query->whereIn('name', array_keys(config('ziswaf.default_hak_amil_percentages', [])));
     }
+
+    /**
+     * The dedicated "Hak Amil" book — its income only ever comes from the automatic
+     * split in Donations\ConfirmRequest, never manual entry (see transactions/index.blade.php,
+     * which hides the "add income" button for this book).
+     */
+    public function isHakAmilBook(): bool
+    {
+        return $this->id == config('ziswaf.hak_amil_book_id');
+    }
 }

@@ -31,7 +31,7 @@
 <body>
     <div class="d-none d-sm-block">
         <div class="nav-public d-flex align-items-center justify-content-between position-relative">
-            <a href="{{ url('/') }}"><img src="{{ asset('images/logo_bukumasjid.svg') }}" style="width: 150px"></a>
+            <div></div>
             <div class="position-relative text-center">
                 <div class="nav-desktop position-relative shadow-sm rounded">
                     <ul class="nav">
@@ -60,9 +60,7 @@
     <div class="container p-0 bg-white">
         <div class="d-sm-none">
             <div class="row p-3 me-0">
-                <div class="col text-start">
-                    <a href="{{ url('/') }}"><img src="{{ asset('images/logo_bukumasjid.svg') }}" style="width: 100px"></a>
-                </div>
+                <div class="col text-start"></div>
                 <div class="col text-end">
                     <a class="btn position-relative z-2" data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart">
                         <i class="ti ti-baseline-density-medium"></i>
