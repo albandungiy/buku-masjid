@@ -43,6 +43,7 @@
             {{ Form::submit(__('report.view_report'), ['class' => 'btn btn-info mr-1']) }}
             {{ link_to_route('reports.finance.detailed', __('report.this_month'), [], ['class' => 'btn btn-secondary mr-1']) }}
             {{ link_to_route('reports.finance.detailed_pdf', __('report.export_pdf'), ['year' => $startDate->format('Y'), 'month' => request('month', $startDate->format('m')), 'bank_account_id' => request('bank_account_id')], ['class' => 'btn btn-secondary mr-1']) }}
+            {{ link_to_route('reports.finance.detailed_excel', __('report.export_excel'), ['year' => $startDate->format('Y'), 'month' => request('month', $startDate->format('m')), 'bank_account_id' => request('bank_account_id')], ['class' => 'btn btn-secondary mr-1']) }}
         </div>
         @if (request('month') != '00')
             <div class="form-group">

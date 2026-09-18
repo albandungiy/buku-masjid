@@ -53,6 +53,7 @@ return [
     'view_in_out' => 'Laporan KAS per Kategori',
     'categorized_transactions' => 'Laporan Pemasukan dan Pengeluaran KAS',
     'export_pdf' => 'Export PDF',
+    'export_excel' => 'Export Excel',
     'has_pdf_page_number' => 'Pakai Nomor Halaman PDF',
     'title_updated' => 'Judul laporan telah diupdate.',
     'management' => 'Pengurus',

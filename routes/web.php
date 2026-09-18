@@ -80,15 +80,19 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/finance/dashboard', 'Reports\InternalFinanceController@dashboard')->name('reports.finance.dashboard');
         Route::get('/finance/dashboard_pdf', 'Reports\InternalFinanceController@dashboardPdf')->name('reports.finance.dashboard_pdf');
+        Route::get('/finance/dashboard_excel', 'Reports\InternalFinanceController@dashboardExcel')->name('reports.finance.dashboard_excel');
 
         Route::get('/finance/summary', 'Reports\InternalFinanceController@summary')->name('reports.finance.summary');
         Route::get('/finance/summary_pdf', 'Reports\InternalFinanceController@summaryPdf')->name('reports.finance.summary_pdf');
+        Route::get('/finance/summary_excel', 'Reports\InternalFinanceController@summaryExcel')->name('reports.finance.summary_excel');
 
         Route::get('/finance/categorized', 'Reports\InternalFinanceController@categorized')->name('reports.finance.categorized');
         Route::get('/finance/categorized_pdf', 'Reports\InternalFinanceController@categorizedPdf')->name('reports.finance.categorized_pdf');
+        Route::get('/finance/categorized_excel', 'Reports\InternalFinanceController@categorizedExcel')->name('reports.finance.categorized_excel');
 
         Route::get('/finance/detailed', 'Reports\InternalFinanceController@detailed')->name('reports.finance.detailed');
         Route::get('/finance/detailed_pdf', 'Reports\InternalFinanceController@detailedPdf')->name('reports.finance.detailed_pdf');
+        Route::get('/finance/detailed_excel', 'Reports\InternalFinanceController@detailedExcel')->name('reports.finance.detailed_excel');
     });
 
     /*

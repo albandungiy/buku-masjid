@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Exports\CategorizedReportExport;
+use App\Exports\DashboardReportExport;
+use App\Exports\DetailedReportExport;
+use App\Exports\SummaryReportExport;
 use App\Models\BankAccount;
 use App\Models\BankAccountBalance;
+use App\Models\Category;
+use App\Transaction;
 use Carbon\Carbon;
 use Facades\App\Helpers\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InternalFinanceController extends FinanceController
 {
@@ -51,6 +59,35 @@ class InternalFinanceController extends FinanceController
         $pdf = \PDF::loadView('reports.finance.'.$reportPeriode.'.dashboard_pdf', $passedVariables);
 
         return $pdf->stream(__('dashboard.dashboard').'.pdf');
+    }
+
+    public function dashboardExcel(Request $request)
+    {
+        $book = auth()->activeBook();
+        $startDate = $this->getStartDate($request);
+        $endDate = $this->getEndDate($request);
+
+        $startBalance = $book->getBalance($startDate->clone()->subDay()->format('Y-m-d'));
+        $rangeTransactions = $this->getTansactionsByDateRange($startDate->format('Y-m-d'), $endDate->format('Y-m-d'));
+        $incomeTotal = $rangeTransactions->where('in_out', 1)->sum('amount');
+        $spendingTotal = $rangeTransactions->where('in_out', 0)->sum('amount');
+        $endBalance = $startBalance + $incomeTotal - $spendingTotal;
+
+        $passedVariables = [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'startBalance' => $startBalance,
+            'incomeTotal' => $incomeTotal,
+            'spendingTotal' => $spendingTotal,
+            'endBalance' => $endBalance,
+            'topIncomeCategories' => $this->getTopCategories($book, $startDate, $endDate, 'income'),
+            'topSpendingCategories' => $this->getTopCategories($book, $startDate, $endDate, 'spending'),
+            'topIncomeTransactions' => $this->getTopTransactions($startDate, $endDate, 'income'),
+            'topSpendingTransactions' => $this->getTopTransactions($startDate, $endDate, 'spending'),
+            'dailyAverages' => $this->getDailyAverages($book, $startDate, $endDate),
+        ];
+
+        return Excel::download(new DashboardReportExport($passedVariables), __('dashboard.dashboard').'.xlsx');
     }
 
     public function summary(Request $request)
@@ -115,6 +152,34 @@ class InternalFinanceController extends FinanceController
         return $pdf->stream(__('report.monthly', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.pdf');
     }
 
+    public function summaryExcel(Request $request)
+    {
+        $startDate = $this->getStartDate($request);
+        $endDate = $this->getEndDate($request);
+
+        $groupedTransactions = $this->getTansactionsByDateRange($startDate->format('Y-m-d'), $endDate->format('Y-m-d'))->groupBy('in_out');
+        $incomeCategories = isset($groupedTransactions[1]) ? $groupedTransactions[1]->pluck('category')->unique()->filter() : collect([]);
+        $spendingCategories = isset($groupedTransactions[0]) ? $groupedTransactions[0]->pluck('category')->unique()->filter() : collect([]);
+        $lastMonthDate = $startDate->clone()->subDay();
+        $currentMonthEndDate = $endDate->clone();
+        if ($startDate->format('Y-m') == Carbon::now()->format('Y-m') && $startDate->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
+            $currentMonthEndDate = Carbon::now();
+        }
+        $lastBankAccountBalanceOfTheMonth = $this->getLastBankAccountBalance($currentMonthEndDate);
+        $lastMonthBalance = auth()->activeBook()->getBalance($lastMonthDate->format('Y-m-d'));
+
+        $passedVariables = compact(
+            'startDate', 'endDate', 'groupedTransactions', 'incomeCategories',
+            'spendingCategories', 'lastBankAccountBalanceOfTheMonth', 'lastMonthDate',
+            'lastMonthBalance', 'currentMonthEndDate'
+        );
+
+        return Excel::download(
+            new SummaryReportExport($passedVariables),
+            __('report.monthly', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.xlsx'
+        );
+    }
+
     public function categorized(Request $request)
     {
         $startDate = $this->getStartDate($request);
@@ -160,6 +225,27 @@ class InternalFinanceController extends FinanceController
         $pdf = \PDF::loadView('reports.finance.'.$reportPeriode.'.categorized_pdf', $passedVariables);
 
         return $pdf->stream(__('report.categorized_transactions', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.pdf');
+    }
+
+    public function categorizedExcel(Request $request)
+    {
+        $startDate = $this->getStartDate($request);
+        $endDate = $this->getEndDate($request);
+
+        $groupedTransactions = $this->getTansactionsByDateRange($startDate->format('Y-m-d'), $endDate->format('Y-m-d'))->groupBy('in_out');
+        $incomeCategories = isset($groupedTransactions[1]) ? $groupedTransactions[1]->pluck('category')->unique()->filter() : collect([]);
+        $spendingCategories = isset($groupedTransactions[0]) ? $groupedTransactions[0]->pluck('category')->unique()->filter() : collect([]);
+        $currentMonthEndDate = $endDate->clone();
+
+        $passedVariables = compact(
+            'startDate', 'endDate', 'currentMonthEndDate',
+            'groupedTransactions', 'incomeCategories', 'spendingCategories'
+        );
+
+        return Excel::download(
+            new CategorizedReportExport($passedVariables),
+            __('report.categorized_transactions', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.xlsx'
+        );
     }
 
     public function detailed(Request $request)
@@ -210,6 +296,29 @@ class InternalFinanceController extends FinanceController
         return $pdf->stream(__('report.weekly', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.pdf');
     }
 
+    public function detailedExcel(Request $request)
+    {
+        $startDate = $this->getStartDate($request);
+        $endDate = $this->getEndDate($request);
+        $book = auth()->activeBook();
+
+        $groupedTransactions = $this->getWeeklyGroupedTransactions($startDate->format('Y-m-d'), $endDate->format('Y-m-d'));
+        $currentMonthEndDate = $endDate->clone();
+        $weekLabels = $this->getWeekLabelsByDateRange(
+            $startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $book->start_week_day_code
+        );
+        $lastMonthDate = Carbon::parse($startDate)->subDay();
+
+        $passedVariables = compact(
+            'startDate', 'endDate', 'groupedTransactions', 'lastMonthDate', 'currentMonthEndDate', 'weekLabels'
+        );
+
+        return Excel::download(
+            new DetailedReportExport($passedVariables),
+            __('report.weekly', ['year_month' => $currentMonthEndDate->isoFormat('MMMM Y')]).'.xlsx'
+        );
+    }
+
     private function getWeeklyGroupedTransactions(string $startDate, string $endDate): Collection
     {
         $transactions = $this->getTansactionsByDateRange($startDate, $endDate);
@@ -256,5 +365,54 @@ class InternalFinanceController extends FinanceController
     private function showLetterhead(): bool
     {
         return Setting::get('masjid_name', config('masjid.name')) && Setting::get('masjid_address');
+    }
+
+    // Same query as App\Http\Livewire\Dashboard\TopCategory::calculateTopCategorySummary(),
+    // replicated here (uncached) since dashboardExcel() needs a one-off, non-interactive result.
+    private function getTopCategories($book, Carbon $startDate, Carbon $endDate, string $typeCode): Collection
+    {
+        $color = config('masjid.'.$typeCode.'_color');
+
+        return Category::where('color', $color)
+            ->where('book_id', $book->id)
+            ->withSum(['transactions' => function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+            }], 'amount')
+            ->get()
+            ->sortByDesc('transactions_sum_amount')
+            ->take(5)
+            ->values();
+    }
+
+    // Same query as App\Http\Livewire\Dashboard\TopTransaction::calculateTopTransactionSummary().
+    private function getTopTransactions(Carbon $startDate, Carbon $endDate, string $typeCode): Collection
+    {
+        $inOut = $typeCode == 'income' ? 1 : 0;
+
+        return Transaction::where('in_out', $inOut)
+            ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->orderBy('amount', 'desc')
+            ->limit(5)
+            ->get();
+    }
+
+    // Same query as App\Http\Livewire\Dashboard\DailyAverages::calculateDailyAveragesSummary().
+    private function getDailyAverages($book, Carbon $startDate, Carbon $endDate): Collection
+    {
+        $dailyAverages = DB::table('transactions')
+            ->selectRaw('sum(amount) as total, in_out')
+            ->where('book_id', $book->id)
+            ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->groupBy('in_out')
+            ->orderBy('in_out', 'desc')
+            ->get();
+        $dayCount = $startDate->diffInDays($endDate);
+        $dailyAverages->each(function ($totalTransaction) use ($dayCount) {
+            $typeCode = $totalTransaction->in_out == 1 ? 'income' : 'spending';
+            $totalTransaction->description = __('transaction.'.$typeCode).' / '.__('time.day_name');
+            $totalTransaction->average = $dayCount ? ($totalTransaction->total / $dayCount) : 0;
+        });
+
+        return $dailyAverages;
     }
 }

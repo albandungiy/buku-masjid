@@ -40,6 +40,7 @@
             {{ Form::submit(__('report.view_report'), ['class' => 'btn btn-info mr-1']) }}
             {{ link_to_route('reports.finance.categorized', __('app.reset'), [], ['class' => 'btn btn-secondary mr-1']) }}
             {{ link_to_route('reports.finance.categorized_pdf', __('report.export_pdf'), ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'bank_account_id' => request('bank_account_id')], ['class' => 'btn btn-secondary mr-1']) }}
+            {{ link_to_route('reports.finance.categorized_excel', __('report.export_excel'), ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'bank_account_id' => request('bank_account_id')], ['class' => 'btn btn-secondary mr-1']) }}
         </div>
         {{ Form::close() }}
     </div>
