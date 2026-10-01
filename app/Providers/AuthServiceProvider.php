@@ -17,6 +17,9 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Donation' => 'App\Policies\DonationPolicy',
         'App\Models\Distribution' => 'App\Policies\DistributionPolicy',
         'App\Models\Event' => 'App\Policies\EventPolicy',
+        'App\Models\Post' => 'App\Policies\PostPolicy',
+        'App\Models\PostCategory' => 'App\Policies\PostCategoryPolicy',
+        'App\Models\Menu' => 'App\Policies\MenuPolicy',
     ];
 
     public function boot()

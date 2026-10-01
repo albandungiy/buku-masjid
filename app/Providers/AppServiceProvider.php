@@ -7,11 +7,14 @@ use App\Models\Book;
 use App\Models\Distribution;
 use App\Models\Donation;
 use App\Models\Event;
+use App\Models\Menu;
+use App\Models\Post;
 use App\Transaction;
 use App\User;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Guards\TokenGuard;
@@ -37,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
             'donations' => Donation::class,
             'distributions' => Distribution::class,
             'events' => Event::class,
+            'posts' => Post::class,
         ]);
 
         // Ref: https://dzone.com/articles/how-to-use-laravel-macro-with-example
@@ -91,6 +95,23 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         );
+
+        // Drives the public nav in layouts/guest.blade.php. Guarded by Schema::hasTable()
+        // (not config('features.cms.is_active')) so upgrading installations that haven't
+        // migrated/seeded Menu yet still get *a* nav — see docs/cms.md §4: the Blade side
+        // falls back to the original hardcoded links whenever this collection is empty.
+        View::composer('layouts.guest', function ($view) {
+            $mainMenus = collect();
+            if (Schema::hasTable('menus')) {
+                $mainMenus = Menu::where('location_code', config('cms.default_menu_location', 'main_nav'))
+                    ->whereNull('parent_id')
+                    ->where('is_active', true)
+                    ->orderBy('order')
+                    ->with('children')
+                    ->get();
+            }
+            $view->with('mainMenus', $mainMenus);
+        });
     }
 
     /**

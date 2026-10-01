@@ -39,6 +39,23 @@
             {!! link_to_route('users.index', __('user.user'), [], ['class' => 'nav-link'.(Request::segment(1) == 'users' ? ' active' : '')]) !!}
         </li>
     @endcan
+    @if (Route::has('posts.index'))
+        @can('view-any', new App\Models\Post)
+            <li class="nav-item">
+                {!! link_to_route('posts.index', __('post.post'), [], ['class' => 'nav-link'.(in_array(Request::segment(1), ['posts']) ? ' active' : '')]) !!}
+            </li>
+        @endcan
+        @can('view-any', new App\Models\PostCategory)
+            <li class="nav-item">
+                {!! link_to_route('post_categories.index', __('post_category.post_category'), [], ['class' => 'nav-link'.(Request::segment(1) == 'post_categories' ? ' active' : '')]) !!}
+            </li>
+        @endcan
+        @can('view-any', new App\Models\Menu)
+            <li class="nav-item">
+                {!! link_to_route('menus.index', __('menu.menu'), [], ['class' => 'nav-link'.(Request::segment(1) == 'menus' ? ' active' : '')]) !!}
+            </li>
+        @endcan
+    @endif
     @can('manage_database_backup')
         <li class="nav-item">
             {!! link_to_route('database_backups.index', __('database_backup.list'), [], ['class' => 'nav-link'.(Request::segment(1) == 'database_backups' ? ' active' : '')]) !!}

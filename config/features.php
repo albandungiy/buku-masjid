@@ -16,4 +16,7 @@ return [
     'ziswaf' => [
         'is_active' => env('FEATURES_ZISWAF_IS_ACTIVE', false),
     ],
+    'cms' => [
+        'is_active' => env('FEATURES_CMS_IS_ACTIVE', false),
+    ],
 ];

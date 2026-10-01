@@ -35,13 +35,35 @@
             <div class="position-relative text-center">
                 <div class="nav-desktop position-relative shadow-sm rounded">
                     <ul class="nav">
-                        <li class="nav-item px-2"><a class="nav-link" href="{{ url('/') }}">{{ __('app.home') }}</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="{{ route('public_reports.index') }}">{{ __('report.report') }}</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="{{ route('public.books.index') }}">{{ __('app.program') }}</a></li>
-                        @if (Route::has('public_schedules.index'))
-                            <li class="nav-item px-2"><a class="nav-link" href="{{ route('public_schedules.this_week') }}">{{ __('lecturing.public_schedule') }}</a></li>
+                        @if ($mainMenus->isNotEmpty())
+                            @foreach ($mainMenus as $menu)
+                                @continue(!$menu->url)
+                                @if ($menu->children->isNotEmpty())
+                                    <li class="nav-item px-2 dropdown">
+                                        <a class="nav-link dropdown-toggle" href="{{ $menu->url }}" id="navDropdown{{ $menu->id }}" data-bs-toggle="dropdown" aria-expanded="false">{{ $menu->label }}</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navDropdown{{ $menu->id }}">
+                                            @foreach ($menu->children as $child)
+                                                @continue(!$child->url)
+                                                <li><a class="dropdown-item" href="{{ $child->url }}">{{ $child->label }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @else
+                                    <li class="nav-item px-2"><a class="nav-link" href="{{ $menu->url }}">{{ $menu->label }}</a></li>
+                                @endif
+                            @endforeach
+                        @else
+                            {{-- Fallback while the menus table hasn't been migrated/seeded yet (see
+                                 AppServiceProvider's layouts.guest composer) — keeps the nav from
+                                 going blank on installations that haven't adopted CMS Menu yet. --}}
+                            <li class="nav-item px-2"><a class="nav-link" href="{{ url('/') }}">{{ __('app.home') }}</a></li>
+                            <li class="nav-item px-2"><a class="nav-link" href="{{ route('public_reports.index') }}">{{ __('report.report') }}</a></li>
+                            <li class="nav-item px-2"><a class="nav-link" href="{{ route('public.books.index') }}">{{ __('app.program') }}</a></li>
+                            @if (Route::has('public_schedules.index'))
+                                <li class="nav-item px-2"><a class="nav-link" href="{{ route('public_schedules.this_week') }}">{{ __('lecturing.public_schedule') }}</a></li>
+                            @endif
+                            <li class="nav-item px-2"><a class="nav-link" href="{{ route('public.contact') }}">{{ __('app.contact') }}</a></li>
                         @endif
-                        <li class="nav-item px-2"><a class="nav-link" href="{{ route('public.contact') }}">{{ __('app.contact') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -78,13 +100,24 @@
                 </div>
                 <div class="mt-3 fs-2 sidebar-menu bd-highlight">
                     <ul>
-                        <li class="py-3 border-top mt-2"><a href="{{ url('/') }}">{{ __('app.home') }}</a></li>
-                        <li class="pb-3"><a href="{{ route('public_reports.index') }}">{{ __('report.report') }}</a></li>
-                        <li class="pb-3"><a href="{{ route('public.books.index') }}">{{ __('app.program') }}</a></li>
-                        @if (Route::has('public_schedules.index'))
-                            <li class="pb-3"><a href="{{ route('public_schedules.this_week') }}">{{ __('lecturing.public_schedule') }}</a></li>
+                        @if ($mainMenus->isNotEmpty())
+                            @foreach ($mainMenus as $menu)
+                                @continue(!$menu->url)
+                                <li class="pb-3 {{ $loop->first ? 'py-3 border-top mt-2' : '' }}"><a href="{{ $menu->url }}">{{ $menu->label }}</a></li>
+                                @foreach ($menu->children as $child)
+                                    @continue(!$child->url)
+                                    <li class="pb-3 pl-3"><a href="{{ $child->url }}">— {{ $child->label }}</a></li>
+                                @endforeach
+                            @endforeach
+                        @else
+                            <li class="py-3 border-top mt-2"><a href="{{ url('/') }}">{{ __('app.home') }}</a></li>
+                            <li class="pb-3"><a href="{{ route('public_reports.index') }}">{{ __('report.report') }}</a></li>
+                            <li class="pb-3"><a href="{{ route('public.books.index') }}">{{ __('app.program') }}</a></li>
+                            @if (Route::has('public_schedules.index'))
+                                <li class="pb-3"><a href="{{ route('public_schedules.this_week') }}">{{ __('lecturing.public_schedule') }}</a></li>
+                            @endif
+                            <li class="pb-3"><a href="{{ route('public.contact') }}">{{ __('app.contact') }}</a></li>
                         @endif
-                        <li class="pb-3"><a href="{{ route('public.contact') }}">{{ __('app.contact') }}</a></li>
                         <li class="py-3 border-top mt-2">
                             @if (auth()->check())
                                 <a href="{{ route('home') }}" >{{ auth()->user()->name }}</a>

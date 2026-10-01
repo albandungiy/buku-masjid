@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'menu' => 'Menu',
+    'list' => 'Pengaturan Menu',
+    'create' => 'Tambah Menu',
+    'created' => 'Menu baru telah dibuat.',
+    'edit' => 'Edit Menu',
+    'updated' => 'Menu telah diupdate.',
+    'delete' => 'Hapus Menu',
+    'delete_confirm' => 'Anda yakin akan menghapus Menu ini?',
+    'deleted' => 'Menu telah dihapus.',
+    'undeleted' => 'Menu gagal dihapus.',
+    'reordered' => 'Urutan menu telah disimpan.',
+    'not_found' => 'Belum ada Menu.',
+    'label' => 'Label',
+    'target_type' => 'Tipe Tujuan',
+    'target_type_route' => 'Fitur Existing (route)',
+    'target_type_post' => 'Halaman/Berita (Post)',
+    'target_type_url' => 'URL Bebas',
+    'target_value' => 'Tujuan',
+    'target_value_route_placeholder' => 'Nama route, mis. public_reports.index',
+    'target_value_url_placeholder' => 'Mis. /kontak atau https://...',
+    'is_active' => 'Aktif',
+    'order' => 'Urutan',
+    'drag_to_reorder' => 'Gunakan tombol ▲▼ untuk mengubah urutan tampil di navigasi.',
+    'broken_link_notice' => 'Tujuan menu ini tidak ditemukan (route/halaman mungkin sudah dihapus atau fiturnya nonaktif) — tidak akan tampil di navigasi publik.',
+];

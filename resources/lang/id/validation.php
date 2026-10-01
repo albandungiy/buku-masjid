@@ -134,6 +134,24 @@ return [
         ],
     ],
 
+    'post' => [
+        'category_id' => [
+            'page_no_category' => 'Halaman (page) tidak menggunakan kategori — kategori hanya untuk Berita.',
+        ],
+    ],
+
+    'post_category' => [
+        'has_posts' => 'Kategori ini masih dipakai oleh satu atau lebih Berita, tidak bisa dihapus.',
+    ],
+
+    'menu' => [
+        'target_value' => [
+            'route_not_found' => 'Route tujuan tidak ditemukan — mungkin nama route salah atau fiturnya sedang dimatikan.',
+            'post_not_found' => 'Post tujuan tidak ditemukan.',
+            'url_invalid' => 'URL harus diawali dengan / (relatif) atau http(s):// (absolut).',
+        ],
+    ],
+
     /*
     |---------------------------------------------------------------------------------------
     | Kustom Validasi Atribut

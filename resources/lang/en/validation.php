@@ -134,6 +134,24 @@ return [
         ],
     ],
 
+    'post' => [
+        'category_id' => [
+            'page_no_category' => 'Pages don\'t use a category — categories are for News only.',
+        ],
+    ],
+
+    'post_category' => [
+        'has_posts' => 'This category is still used by one or more News posts and can\'t be deleted.',
+    ],
+
+    'menu' => [
+        'target_value' => [
+            'route_not_found' => 'The target route was not found — the name may be wrong, or the feature is currently disabled.',
+            'post_not_found' => 'The target post was not found.',
+            'url_invalid' => 'The URL must start with / (relative) or http(s):// (absolute).',
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

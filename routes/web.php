@@ -20,6 +20,12 @@ if (config('features.public_display.is_active')) {
     Route::get('/display', 'PublicDisplayController@index')->name('public.display.index');
 }
 
+if (config('features.cms.is_active')) {
+    Route::get('/berita', 'PublicPostController@newsIndex')->name('public.news.index');
+    Route::get('/berita/{post:slug}', 'PublicPostController@newsShow')->name('public.news.show');
+    Route::get('/halaman/{post:slug}', 'PublicPostController@pageShow')->name('public.pages.show');
+}
+
 Auth::routes(['register' => false, 'reset' => false]);
 
 Route::group(['prefix' => 'laporan-kas', 'as' => 'public_reports.'], function () {
@@ -153,6 +159,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('distributions/{distribution}/reject', 'Distributions\RejectController@update')->name('distributions.reject');
 
         Route::resource('events', 'EventsController');
+    }
+
+    /*
+     * CMS Routes (Posts, Post Categories, Menus)
+     */
+    if (config('features.cms.is_active')) {
+        Route::resource('posts', 'PostsController');
+
+        Route::resource('post_categories', 'PostCategoriesController')->only(['index', 'store', 'update', 'destroy']);
+
+        Route::patch('menus_reorder', 'MenusController@reorder')->name('menus.reorder');
+        Route::resource('menus', 'MenusController')->only(['index', 'store', 'update', 'destroy']);
     }
 
     Route::get('masjid_profile', [App\Http\Controllers\MasjidProfileController::class, 'show'])->name('masjid_profile.show');

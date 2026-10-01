@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'menu' => 'Menu',
+    'list' => 'Menu Settings',
+    'create' => 'Add Menu',
+    'created' => 'New menu created.',
+    'edit' => 'Edit Menu',
+    'updated' => 'Menu updated.',
+    'delete' => 'Delete Menu',
+    'delete_confirm' => 'Are you sure you want to delete this menu?',
+    'deleted' => 'Menu deleted.',
+    'undeleted' => 'Failed to delete menu.',
+    'reordered' => 'Menu order saved.',
+    'not_found' => 'No menus yet.',
+    'label' => 'Label',
+    'target_type' => 'Target Type',
+    'target_type_route' => 'Existing Feature (route)',
+    'target_type_post' => 'Page/News (Post)',
+    'target_type_url' => 'Free URL',
+    'target_value' => 'Target',
+    'target_value_route_placeholder' => 'Route name, e.g. public_reports.index',
+    'target_value_url_placeholder' => 'E.g. /kontak or https://...',
+    'is_active' => 'Active',
+    'order' => 'Order',
+    'drag_to_reorder' => 'Use the ▲▼ buttons to change the order shown on the nav.',
+    'broken_link_notice' => 'This menu\'s target was not found (the route/page may have been deleted, or the feature is disabled) — it won\'t show on the public nav.',
+];
