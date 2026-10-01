@@ -22,6 +22,8 @@
                     <div class="card h-100">
                         @if ($post->files->isNotEmpty())
                             <img src="{{ asset('storage/'.$post->files->first()->file_path) }}" class="card-img-top" style="height:180px;object-fit:cover">
+                        @elseif (Setting::get('masjid_logo_path'))
+                            <img src="{{ Storage::url(Setting::get('masjid_logo_path')) }}" class="card-img-top" style="height:180px;object-fit:contain;background-color:#f8f8f8;padding:20px">
                         @endif
                         <div class="card-body d-flex flex-column">
                             @if ($post->category)
