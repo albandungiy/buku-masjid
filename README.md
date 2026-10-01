@@ -46,6 +46,10 @@ Jika anda tertarik untuk menjadi sponsor/mitra, silakan hubungi Whatsapp Tim Buk
    - Penyaluran dana ke Asnaf dengan validasi saldo, alur persetujuan (approve/reject).
    - Pengaturan persentase Hak Amil per jenis dana.
    - Kalender kegiatan (event) pengurus/UPZ.
+8. CMS (Content Management System) — fitur opsional, aktifkan lewat `FEATURES_CMS_IS_ACTIVE=true` di `.env`:
+   - Pengelolaan Halaman (Page) & Berita (News) dengan editor rich-text, kategori Berita, gambar/lampiran.
+   - Menu navigasi publik yang dinamis — admin/sekretaris bisa atur urutan, label, dan tujuan menu (fitur existing, Halaman/Berita, atau URL bebas) tanpa ubah kode.
+   - Section Sejarah, Visi & Misi, dan Struktur Pengurus di homepage, dikelola sebagai Halaman biasa.
 
 ## Cara Install
 
@@ -161,6 +165,20 @@ Perintah ini membuat contoh muzakki/donatur, donasi (pending/confirmed/failed), 
 ```bash
 $ php artisan buku-masjid:remove-ziswaf-demo-data
 ```
+
+#### Data Awal Modul CMS
+
+Kalau `FEATURES_CMS_IS_ACTIVE=true` (lihat [.env.example](.env.example)) dan sudah pernah menjalankan `php artisan migrate --seed`, isi menu navigasi & konten homepage dengan:
+
+```bash
+$ php artisan db:seed --class=MenuSeeder
+$ php artisan db:seed --class=HomepageContentSeeder
+```
+
+- `MenuSeeder` — mengisi menu navigasi publik (Beranda, Laporan, Program, Jadwal Pengajian, Kontak) ke tabel `menus`, supaya nav yang sudah dialihkan ke mode dinamis tidak kosong.
+- `HomepageContentSeeder` — mengisi 3 Halaman khusus (Sejarah, Visi & Misi, Struktur Pengurus) dengan konten contoh, yang tampil otomatis di homepage.
+
+Keduanya aman dijalankan berulang kali (idempotent) — tidak akan membuat data dobel.
 
 ## Screenshot
 

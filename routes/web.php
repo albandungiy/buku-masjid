@@ -173,6 +173,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('menus', 'MenusController')->only(['index', 'store', 'update', 'destroy']);
     }
 
+    /*
+     * Running Text Routes (/display financial card replacement)
+     */
+    if (config('features.public_display.is_active')) {
+        Route::patch('running_texts_reorder', 'RunningTextsController@reorder')->name('running_texts.reorder');
+        Route::resource('running_texts', 'RunningTextsController')->only(['index', 'store', 'update', 'destroy']);
+    }
+
     Route::get('masjid_profile', [App\Http\Controllers\MasjidProfileController::class, 'show'])->name('masjid_profile.show');
     Route::get('masjid_profile/edit', [App\Http\Controllers\MasjidProfileController::class, 'edit'])->name('masjid_profile.edit');
     Route::patch('masjid_profile', [App\Http\Controllers\MasjidProfileController::class, 'update'])->name('masjid_profile.update');

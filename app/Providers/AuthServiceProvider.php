@@ -20,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Post' => 'App\Policies\PostPolicy',
         'App\Models\PostCategory' => 'App\Policies\PostCategoryPolicy',
         'App\Models\Menu' => 'App\Policies\MenuPolicy',
+        'App\Models\RunningText' => 'App\Policies\RunningTextPolicy',
     ];
 
     public function boot()

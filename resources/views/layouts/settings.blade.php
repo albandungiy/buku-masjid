@@ -56,6 +56,13 @@
             </li>
         @endcan
     @endif
+    @if (Route::has('running_texts.index'))
+        @can('view-any', new App\Models\RunningText)
+            <li class="nav-item">
+                {!! link_to_route('running_texts.index', __('running_text.running_text'), [], ['class' => 'nav-link'.(Request::segment(1) == 'running_texts' ? ' active' : '')]) !!}
+            </li>
+        @endcan
+    @endif
     @can('manage_database_backup')
         <li class="nav-item">
             {!! link_to_route('database_backups.index', __('database_backup.list'), [], ['class' => 'nav-link'.(Request::segment(1) == 'database_backups' ? ' active' : '')]) !!}
